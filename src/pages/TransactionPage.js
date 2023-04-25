@@ -1,13 +1,54 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
+import { useParams} from 'react-router-dom';
 
 export default function TransactionsPage() {
+  const params = useParams();
+  const navigate = useNavigate();
+  const [novaTransacao, setNovaTransacao] = useState({value: "", description: ""})
+  console.log(params)
+
+  useEffect(() => {
+    if (!localStorage.getItem("token")){
+      navigate("/");
+    }
+  }, []);
+
+  function enviar (e){
+    e.preventDefault();
+
+    if(!novaTransacao) return alert("Preencha os campos abaixo")
+
+    const url = `http://localhost:5000/nova-transacao/${params.tipo}`;
+    const promise = axios.post(url, novaTransacao, { headers: {"Authorization": localStorage.getItem("token") } });
+    promise.then(() => {
+      alert("Transação realizada com sucesso!");
+      navigate("/home");
+    })
+    promise.catch((err) => {
+      alert(err.response.data);
+    })
+  }
+
   return (
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
-      <form>
-        <input placeholder="Valor" type="text"/>
-        <input placeholder="Descrição" type="text" />
-        <button>Salvar TRANSAÇÃO</button>
+      <form onSubmit={(e) => enviar(e)}>
+        <input 
+        placeholder="Valor" 
+        type="text"
+        value={novaTransacao.value}
+        onChange={(e) => setNovaTransacao({...novaTransacao, value: e.target.value})}
+        />
+        <input 
+        placeholder="Descrição" 
+        type="text" 
+        value={novaTransacao.description}
+        onChange={(e) => setNovaTransacao({...novaTransacao, description: e.target.value})}
+        />
+        <button type="submit">Salvar TRANSAÇÃO</button>
       </form>
     </TransactionsContainer>
   )
