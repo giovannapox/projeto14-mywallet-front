@@ -16,7 +16,7 @@ export default function SignUpPage() {
     if(body.password !== confirmaSenha){
       return alert("Senha incorreta!");
     }
-    const url = "http://localhost:5000/cadastro";
+    const url = `${process.env.REACT_APP_API}/cadastro`;
     const promise = axios.post(url, body);
     promise.then(() => {
       alert("Usuário cadastrado com sucesso!");

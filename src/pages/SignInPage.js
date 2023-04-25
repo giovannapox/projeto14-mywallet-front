@@ -13,7 +13,7 @@ export default function SignInPage() {
 
     if(!usuario) return alert("Preencha os campos abaixo")
 
-    const url = "http://localhost:5000/";
+    const url = `${process.env.REACT_APP_API}/`;
     const promise = axios.post(url, usuario);
     promise.then((res) => {
       alert("Login realizado com sucesso!");

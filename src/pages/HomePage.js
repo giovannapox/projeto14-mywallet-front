@@ -15,7 +15,7 @@ export default function HomePage() {
       navigate("/");
     }
 
-    const url = "http://localhost:5000/home";
+    const url = `${process.env.REACT_APP_API}/home`;
     const promise = axios.get(url, { headers: {"Authorization": localStorage.getItem("token") } })
     promise.then((res) => {
       setTransacoes(res.data);
